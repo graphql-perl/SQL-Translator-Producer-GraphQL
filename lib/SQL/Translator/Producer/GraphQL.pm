@@ -98,7 +98,7 @@ sub _type2input {
 
 sub schema_dbic2graphql {
   my ($dbic_schema) = @_;
-  my @ast = ({kind => 'scalar', name => 'DateTime' });
+  my @ast = ({kind => 'scalar', name => 'DateTime'});
   my (%name2type, %name2columns, %name2pk21, %name2fk21);
   for my $source (map $dbic_schema->source($_), $dbic_schema->sources) {
     my $name = _dbicsource2pretty($source);
@@ -136,7 +136,7 @@ sub schema_dbic2graphql {
     push @ast, $spec;
   }
   push @ast, {
-    kind=>'type',
+    kind => 'type',
     name => 'Query',
     fields => {
       map {
