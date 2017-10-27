@@ -13,16 +13,16 @@ sub do_test {
   my $result = $t->translate or die $t->error;
   is $result, <<'EOD', $parser;
 type Author {
-  age: Int
+  age: Int!
   get_module: [Module]
-  id: Int
-  message: String
+  id: Int!
+  message: String!
   name: String
 }
 
 input AuthorInput {
-  age: Int
-  message: String
+  age: Int!
+  message: String!
   name: String
 }
 
@@ -31,7 +31,7 @@ scalar DateTime
 type Module {
   author: Author
   author_id: Int
-  id: Int
+  id: Int!
   name: String
 }
 

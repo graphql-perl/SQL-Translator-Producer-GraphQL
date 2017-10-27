@@ -81,6 +81,9 @@ sub _dbicsource2pretty {
 sub _apply_modifier {
   my ($modifier, $typespec) = @_;
   return $typespec if !$modifier;
+  return $typespec if $modifier eq 'non_null'
+    and ref $typespec eq 'ARRAY'
+    and $typespec->[0] eq 'non_null'; # no double-non_null
   [ $modifier, { type => $typespec } ];
 }
 
@@ -111,7 +114,10 @@ sub schema_dbic2graphql {
     for my $column (keys %$columns_info) {
       my $info = $columns_info->{$column};
       $fields{$column} = +{
-        type => $TYPEMAP{ lc $info->{data_type} },
+        type => _apply_modifier(
+          !$info->{is_nullable} && 'non_null',
+          $TYPEMAP{ lc $info->{data_type} },
+        ),
       };
       $name2fk21{$name}->{$column} = 1 if $info->{is_foreign_key};
       push @{ $name2columns{$name} }, $column;
