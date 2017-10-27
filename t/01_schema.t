@@ -5,17 +5,13 @@ use SQL::Translator;
 use File::Spec;
 
 sub do_test {
-  my $type = shift;
-  my $parser = {
-    mysql  => 'MySQL',
-    sqlite => 'SQLite',
-  }->{$type};
+  my ($parser) = @_;
   my $t = SQL::Translator->new();
   $t->parser($parser);
-  $t->filename(File::Spec->catfile('t', 'schema', "$type.sql")) or die $t->error;
+  $t->filename(File::Spec->catfile('t', 'schema', lc "$parser.sql")) or die $t->error;
   $t->producer('GraphQL');
   my $result = $t->translate or die $t->error;
-  is $result, <<'EOD', $type;
+  is $result, <<'EOD', $parser;
 type Author {
   age: Int
   get_module: [Module]
@@ -45,7 +41,7 @@ type Query {
 EOD
 }
 
-for my $type (qw/mysql sqlite/) {
+for my $type (qw(MySQL SQLite)) {
   subtest $type => sub {
     do_test($type);
   };
