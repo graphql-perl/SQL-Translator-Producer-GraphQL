@@ -17,12 +17,12 @@ WriteMakefile(
     'Test::More' => '0.98',
     'SQL::Translator' => '0',
     'SQL::Translator::Producer::DBIx::Class::File' => '0',
-    'GraphQL' => '0.17', # proper Schema.from_ast
+    'GraphQL' => '0.18', # AST no "node"
   },
   PREREQ_PM => {
     'SQL::Translator' => '0',
     'SQL::Translator::Producer::DBIx::Class::File' => '0',
-    'GraphQL' => '0.17', # proper Schema.from_ast
+    'GraphQL' => '0.18', # AST no "node"
   },
   clean => { FILES => 'SQL-Translator-Producer-GraphQL-*' },
   META_MERGE => {

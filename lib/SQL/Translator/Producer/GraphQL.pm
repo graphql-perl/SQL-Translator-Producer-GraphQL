@@ -80,7 +80,7 @@ sub _dbicsource2pretty {
 
 sub schema_dbic2graphql {
   my ($dbic_schema) = @_;
-  my @ast = ({kind => 'scalar', node => { name => 'DateTime' }});
+  my @ast = ({kind => 'scalar', name => 'DateTime' });
   my (%name2type, %name2columns);
   for my $source (map $dbic_schema->source($_), $dbic_schema->sources) {
     my $name = _dbicsource2pretty($source);
@@ -107,20 +107,19 @@ sub schema_dbic2graphql {
     }
     my $spec = +{
       kind => 'type',
-      node => {
-        name => $name,
-        fields => \%fields,
-      },
+      name => $name,
+      fields => \%fields,
     };
     $name2type{$name} = $spec;
     push @ast, $spec;
   }
-  push @ast, {kind=>'type', node => {
+  push @ast, {
+    kind=>'type',
     name => 'Query',
     fields => {
       map {
         my $name = $_;
-        my $type = $name2type{$name}->{node};
+        my $type = $name2type{$name};
         map {
           (lc($name).'By'.ucfirst($_) => {
             type => $name, args => {
@@ -130,7 +129,7 @@ sub schema_dbic2graphql {
         } @{$name2columns{$name}}
       } keys %name2type
     },
-  }};
+  };
   GraphQL::Schema->from_ast(\@ast);
 }
 
