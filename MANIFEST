@@ -4,8 +4,8 @@ Makefile.PL
 MANIFEST			This list of files
 README.md
 t/00-report-prereqs.t
-t/00_compile.t
-t/01_schema.t
+t/00-compile.t
+t/01-schema.t
 t/schema/mysql.sql
 t/schema/sqlite.sql
 xt/manifest.t
