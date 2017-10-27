@@ -153,6 +153,18 @@ sub produce {
 
 SQL::Translator::Producer::GraphQL - GraphQL schema producer for SQL::Translator
 
+=begin markdown
+
+# PROJECT STATUS
+
+| OS      |  Build status |
+|:-------:|--------------:|
+| Linux   | [![Build Status](https://travis-ci.org/graphql-perl/SQL-Translator-Producer-GraphQL.svg?branch=master)](https://travis-ci.org/graphql-perl/SQL-Translator-Producer-GraphQL) |
+
+[![CPAN version](https://badge.fury.io/pl/SQL::Translator::Producer::GraphQL.svg)](https://metacpan.org/pod/SQL::Translator::Producer::GraphQL)
+
+=end markdown
+
 =head1 SYNOPSIS
 
   use SQL::Translator;
