@@ -185,6 +185,14 @@ sub schema_dbic2graphql {
               } keys %{ $name2pk21{$name} }, keys %{ $name2fk21{$name} }),
             },
           },
+          "delete$name" => {
+            type => 'Boolean',
+            args => {
+              (map {
+                $_ => { type => $type->{fields}{$_}{type} }
+              } keys %{ $name2pk21{$name} }),
+            },
+          },
         )
       } keys %name2type
     },
@@ -242,7 +250,8 @@ Its C<Query> type represents a guess at what fields are suitable, based
 on providing a lookup for each type (a L<DBIx::Class::ResultSource>)
 by each of its columns.
 
-The C<Mutation> type is similar: one C<create/update(type)> per "real" type.
+The C<Mutation> type is similar: one C<create/update/delete(type)> per
+"real" type.
 
 =head1 ARGUMENTS
 
