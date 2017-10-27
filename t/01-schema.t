@@ -20,12 +20,22 @@ type Author {
   name: String
 }
 
+input AuthorInput {
+  age: Int
+  message: String
+  name: String
+}
+
 scalar DateTime
 
 type Module {
   author: Author
   author_id: Int
   id: Int
+  name: String
+}
+
+input ModuleInput {
   name: String
 }
 

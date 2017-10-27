@@ -84,23 +84,39 @@ sub _apply_modifier {
   [ $modifier, { type => $typespec } ];
 }
 
+sub _type2input {
+  my ($name, $fields, $pk21, $fk21) = @_;
+  +{
+    kind => 'input',
+    name => "${name}Input",
+    fields => {
+      map { ($_ => $fields->{$_}) }
+        grep !$pk21->{$_} && !$fk21->{$_}, keys %$fields
+    },
+  };
+}
+
 sub schema_dbic2graphql {
   my ($dbic_schema) = @_;
   my @ast = ({kind => 'scalar', name => 'DateTime' });
-  my (%name2type, %name2columns);
+  my (%name2type, %name2columns, %name2pk21, %name2fk21);
   for my $source (map $dbic_schema->source($_), $dbic_schema->sources) {
     my $name = _dbicsource2pretty($source);
     my %fields;
     my $columns_info = $source->columns_info;
+    $name2pk21{$name} = +{ map { ($_ => 1) } $source->primary_columns };
     my %rel2info = map {
       ($_ => $source->relationship_info($_))
     } $source->relationships;
     for my $column (keys %$columns_info) {
+      my $info = $columns_info->{$column};
       $fields{$column} = +{
-        type => $TYPEMAP{ lc $columns_info->{$column}{data_type} },
+        type => $TYPEMAP{ lc $info->{data_type} },
       };
+      $name2fk21{$name}->{$column} = 1 if $info->{is_foreign_key};
       push @{ $name2columns{$name} }, $column;
     }
+    push @ast, _type2input($name, \%fields, $name2pk21{$name}, $name2fk21{$name});
     for my $rel (keys %rel2info) {
       my $info = $rel2info{$rel};
       my $type = _dbicsource2pretty($info->{source});
