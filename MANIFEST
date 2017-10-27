@@ -6,8 +6,6 @@ README.md
 t/00-report-prereqs.t
 t/00_compile.t
 t/01_schema.t
-t/02_defaults.t
-t/03_typemap.t
 t/schema/mysql.sql
 t/schema/sqlite.sql
 xt/manifest.t

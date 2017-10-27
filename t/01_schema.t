@@ -6,43 +6,42 @@ use File::Spec;
 
 sub do_test {
   my $type = shift;
-
   my $parser = {
     mysql  => 'MySQL',
     sqlite => 'SQLite',
   }->{$type};
-
   my $t = SQL::Translator->new();
   $t->parser($parser);
   $t->filename(File::Spec->catfile('t', 'schema', "$type.sql")) or die $t->error;
-
   $t->producer('GraphQL');
   my $result = $t->translate or die $t->error;
   is $result, <<'EOD', $type;
-use strict;
-use warnings;
+type Author {
+  age: Int
+  get_module: [Module]
+  id: Int
+  message: String
+  name: String
+}
 
-use DBIx::Schema::DSL;
+scalar DateTime
 
+type Module {
+  author: Author
+  author_id: Int
+  id: Int
+  name: String
+}
 
-create_table author => columns {
-  integer 'id', not_null, primary_key, auto_increment;
-  varchar 'name', size => 255, unique;
-  tinyint 'age', not_null, default => 0;
-  text 'message', not_null;
-};
-
-create_table module => columns {
-  integer 'id', not_null, primary_key, auto_increment;
-  varchar 'name', size => 255;
-  integer 'author_id';
-
-  add_index author_id_idx => [qw/author_id/];
-
-  belongs_to 'author';
-};
-
-1;
+type Query {
+  authorByAge(age: Int!): Author
+  authorById(id: Int!): Author
+  authorByMessage(message: String!): Author
+  authorByName(name: String!): Author
+  moduleByAuthor_id(author_id: Int!): Module
+  moduleById(id: Int!): Module
+  moduleByName(name: String!): Module
+}
 EOD
 }
 

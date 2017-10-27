@@ -15,12 +15,14 @@ WriteMakefile(
   },
   TEST_REQUIRES => {
     'Test::More' => '0.98',
+    'SQL::Translator' => '0',
+    'SQL::Translator::Producer::DBIx::Class::File' => '0',
+    'GraphQL' => '0.17', # proper Schema.from_ast
   },
   PREREQ_PM => {
-    'DBI' => '0',
     'SQL::Translator' => '0',
-    'Scalar::Util' => '0',
-    'Text::MicroTemplate' => '0',
+    'SQL::Translator::Producer::DBIx::Class::File' => '0',
+    'GraphQL' => '0.17', # proper Schema.from_ast
   },
   clean => { FILES => 'SQL-Translator-Producer-GraphQL-*' },
   META_MERGE => {

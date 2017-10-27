@@ -1,29 +1,29 @@
 # NAME
 
-SQL::Translator::Producer::GraphQL - GraphQL specific producer for SQL::Translator
+SQL::Translator::Producer::GraphQL - GraphQL schema producer for SQL::Translator
 
 # SYNOPSIS
 
     use SQL::Translator;
     use SQL::Translator::Producer::GraphQL;
-
     my $t = SQL::Translator->new( parser => '...' );
     $t->producer('GraphQL');
     $t->translate;
 
 # DESCRIPTION
 
-This module will produce text output of the schema suitable for GraphQL.
+This module will produce a [GraphQL::Schema](https://metacpan.org/pod/GraphQL::Schema) from the given
+[SQL::Translator::Schema](https://metacpan.org/pod/SQL::Translator::Schema). It does this by first
+turning it into a [DBIx::Class::Schema](https://metacpan.org/pod/DBIx::Class::Schema) using
+[SQL::Translator::Producer::DBIx::Class::File](https://metacpan.org/pod/SQL::Translator::Producer::DBIx::Class::File), and introspecting it.
+
+Its `Query` type represents a guess at what fields are suitable, based
+on providing a lookup for each type (a [DBIx::Class::ResultSource](https://metacpan.org/pod/DBIx::Class::ResultSource))
+by each of its columns.
 
 # ARGUMENTS
 
-- `default_not_null`
-
-    Enables `default_not_null` in DSL.
-
-- `default_unsigned`
-
-    Enables `default_unsigned` in DSL.
+Currently none.
 
 # AUTHOR
 
