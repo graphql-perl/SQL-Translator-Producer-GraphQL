@@ -9,7 +9,7 @@ WriteMakefile(
   VERSION_FROM     => 'lib/SQL/Translator/Producer/GraphQL.pm',
   ABSTRACT_FROM    => 'lib/SQL/Translator/Producer/GraphQL.pm',
   LICENSE          => 'artistic_2',
-  MIN_PERL_VERSION => '5.008001',
+  MIN_PERL_VERSION => '5.014',
   CONFIGURE_REQUIRES => {
     'ExtUtils::MakeMaker' => '0',
   },
