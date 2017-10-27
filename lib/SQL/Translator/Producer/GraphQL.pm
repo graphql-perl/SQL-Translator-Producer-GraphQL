@@ -78,6 +78,12 @@ sub _dbicsource2pretty {
   join '', map ucfirst, split /_+/, $source;
 }
 
+sub _apply_modifier {
+  my ($modifier, $typespec) = @_;
+  return $typespec if !$modifier;
+  [ $modifier, { type => $typespec } ];
+}
+
 sub schema_dbic2graphql {
   my ($dbic_schema) = @_;
   my @ast = ({kind => 'scalar', name => 'DateTime' });
@@ -100,7 +106,7 @@ sub schema_dbic2graphql {
       my $type = _dbicsource2pretty($info->{source});
       $rel =~ s/_id$//; # dumb heuristic
       $rel .= '1' if grep $_ eq $rel, @{ $name2columns{$name} };
-      $type = ['list', {type => $type}] if $info->{attrs}{accessor} eq 'multi';
+      $type = _apply_modifier('list', $type) if $info->{attrs}{accessor} eq 'multi';
       $fields{$rel} = +{
         type => $type,
       };
@@ -123,7 +129,7 @@ sub schema_dbic2graphql {
         map {
           (lc($name).'By'.ucfirst($_) => {
             type => $name, args => {
-              $_ => { type => ['non_null', {type => $type->{fields}{$_}{type}}] }
+              $_ => { type => _apply_modifier('non_null', $type->{fields}{$_}{type}) }
             },
           })
         } @{$name2columns{$name}}
