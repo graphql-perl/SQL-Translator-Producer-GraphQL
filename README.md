@@ -29,6 +29,8 @@ Its `Query` type represents a guess at what fields are suitable, based
 on providing a lookup for each type (a [DBIx::Class::ResultSource](https://metacpan.org/pod/DBIx::Class::ResultSource))
 by each of its columns.
 
+The `Mutation` type is similar: one `create(type)` per "real" type.
+
 # ARGUMENTS
 
 Currently none.

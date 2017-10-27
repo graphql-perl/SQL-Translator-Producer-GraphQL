@@ -39,6 +39,11 @@ input ModuleInput {
   name: String
 }
 
+type Mutation {
+  createAuthor(input: AuthorInput!): Author
+  createModule(author_id: Int, input: ModuleInput!): Module
+}
+
 type Query {
   authorByAge(age: Int!): [Author]
   authorById(id: Int!): Author

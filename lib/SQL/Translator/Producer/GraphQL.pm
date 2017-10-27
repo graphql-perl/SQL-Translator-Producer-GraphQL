@@ -159,6 +159,27 @@ sub schema_dbic2graphql {
       } keys %name2type
     },
   };
+  push @ast, {
+    kind => 'type',
+    name => 'Mutation',
+    fields => {
+      map {
+        my $name = $_;
+        my $type = $name2type{$name};
+        (
+          "create$name" => {
+            type => $name,
+            args => {
+              input => { type => _apply_modifier('non_null', "${name}Input") },
+              (map {
+                $_ => { type => $type->{fields}{$_}{type} }
+              } keys %{ $name2fk21{$name} }),
+            },
+          },
+        )
+      } keys %name2type
+    },
+  };
   GraphQL::Schema->from_ast(\@ast);
 }
 
@@ -211,6 +232,8 @@ L<SQL::Translator::Producer::DBIx::Class::File>, and introspecting it.
 Its C<Query> type represents a guess at what fields are suitable, based
 on providing a lookup for each type (a L<DBIx::Class::ResultSource>)
 by each of its columns.
+
+The C<Mutation> type is similar: one C<create(type)> per "real" type.
 
 =head1 ARGUMENTS
 
