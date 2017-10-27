@@ -32,8 +32,8 @@ WriteMakefile(
       x_IRC => 'irc://irc.perl.org/#graphql-perl',
       repository => {
         type => 'git',
-        url => 'git@github.com:mohawk2/SQL-Translator-Producer-GraphQL.git',
-        web => 'https://github.com/mohawk2/SQL-Translator-Producer-GraphQL',
+        url => 'git@github.com:graphql-perl/SQL-Translator-Producer-GraphQL.git',
+        web => 'https://github.com/graphql-perl/SQL-Translator-Producer-GraphQL',
       },
       bugtracker  => {
         web => 'https://github.com/graphql-perl/graphql-perl/issues',
