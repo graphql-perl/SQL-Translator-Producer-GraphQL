@@ -144,7 +144,8 @@ sub schema_dbic2graphql {
         my $type = $name2type{$name};
         map {
           (lc($name).'By'.ucfirst($_) => {
-            type => $name, args => {
+            type => _apply_modifier(!$name2pk21{$name}->{$_} && 'list', $name),
+            args => {
               $_ => { type => _apply_modifier('non_null', $type->{fields}{$_}{type}) }
             },
           })

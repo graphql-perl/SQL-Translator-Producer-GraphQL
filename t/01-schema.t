@@ -40,13 +40,13 @@ input ModuleInput {
 }
 
 type Query {
-  authorByAge(age: Int!): Author
+  authorByAge(age: Int!): [Author]
   authorById(id: Int!): Author
-  authorByMessage(message: String!): Author
-  authorByName(name: String!): Author
-  moduleByAuthor_id(author_id: Int!): Module
+  authorByMessage(message: String!): [Author]
+  authorByName(name: String!): [Author]
+  moduleByAuthor_id(author_id: Int!): [Module]
   moduleById(id: Int!): Module
-  moduleByName(name: String!): Module
+  moduleByName(name: String!): [Module]
 }
 EOD
 }
