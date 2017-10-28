@@ -9,7 +9,8 @@ matrix:
       env: AUTHOR_TESTING=1 RELEASE_TESTING=1
 #      env: COVERAGE=1
 before_install:
-  - git clone git://github.com/travis-perl/helpers ~/travis-perl-helpers
+  - git clone git://github.com/mohawk2/helpers ~/travis-perl-helpers -b fix-ci
+#  - git clone git://github.com/travis-perl/helpers ~/travis-perl-helpers
   - source ~/travis-perl-helpers/init
   - build-perl
   - perl -V
