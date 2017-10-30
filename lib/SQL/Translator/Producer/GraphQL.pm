@@ -114,6 +114,14 @@ sub _make_fk_fields {
   } keys %$fk21);
 }
 
+sub _make_pk_fields {
+  my ($name, $pk21, $name2type) = @_;
+  my $type = $name2type->{$name};
+  (map {
+    $_ => { type => $type->{fields}{$_}{type} }
+  } keys %$pk21),
+}
+
 sub schema_dbic2graphql {
   my ($dbic_schema) = @_;
   my @ast = ({kind => 'scalar', name => 'DateTime'});
@@ -196,17 +204,13 @@ sub schema_dbic2graphql {
             type => $name,
             args => {
               input => { type => _apply_modifier('non_null', "${name}Input") },
-              (map {
-                $_ => { type => $type->{fields}{$_}{type} }
-              } keys %{ $name2pk21{$name} }),
+              _make_pk_fields($name, $name2pk21{$name}, \%name2type),
             },
           },
           "delete$name" => {
             type => 'Boolean',
             args => {
-              (map {
-                $_ => { type => $type->{fields}{$_}{type} }
-              } keys %{ $name2pk21{$name} }),
+              _make_pk_fields($name, $name2pk21{$name}, \%name2type),
             },
           },
         )
