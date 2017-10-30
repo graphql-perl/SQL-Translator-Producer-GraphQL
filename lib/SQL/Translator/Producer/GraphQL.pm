@@ -198,7 +198,7 @@ sub schema_dbic2graphql {
               input => { type => _apply_modifier('non_null', "${name}Input") },
               (map {
                 $_ => { type => $type->{fields}{$_}{type} }
-              } keys %{ $name2pk21{$name} }, keys %{ $name2fk21{$name} }),
+              } keys %{ $name2pk21{$name} }),
             },
           },
           "delete$name" => {
