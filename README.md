@@ -36,6 +36,22 @@ The `Mutation` type is similar: one `create/update/delete(type)` per
 
 Currently none.
 
+# EXPORTS
+
+## schema\_dbic2graphql
+
+Takes as input a [DBIx::Class::Schema](https://metacpan.org/pod/DBIx::Class::Schema) object, returns a
+[GraphQL::Schema](https://metacpan.org/pod/GraphQL::Schema) object. E.g.:
+
+    perl -MSQL::Translator::Producer::GraphQL=schema_dbic2graphql \
+      -MModule::Runtime=require_module \
+      -e '
+        my $dbic_class = shift;
+        require_module $dbic_class;
+        print schema_dbic2graphql($dbic_class->connect)->to_doc;
+      ' \
+      -It/lib-dbicschema Schema | less
+
 # AUTHOR
 
 Ed J, `<etj at cpan.org>`

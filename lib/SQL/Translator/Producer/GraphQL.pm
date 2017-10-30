@@ -4,8 +4,12 @@ use strict;
 use warnings;
 use SQL::Translator::Producer::DBIx::Class::File;
 use GraphQL::Schema;
+use Exporter 'import';
 
 our $VERSION = "0.01";
+our @EXPORT_OK = qw(
+  schema_dbic2graphql
+);
 
 my %TYPEMAP = (
   guid => 'String',
@@ -258,6 +262,22 @@ The C<Mutation> type is similar: one C<create/update/delete(type)> per
 =head1 ARGUMENTS
 
 Currently none.
+
+=head1 EXPORTS
+
+=head2 schema_dbic2graphql
+
+Takes as input a L<DBIx::Class::Schema> object, returns a
+L<GraphQL::Schema> object. E.g.:
+
+  perl -MSQL::Translator::Producer::GraphQL=schema_dbic2graphql \
+    -MModule::Runtime=require_module \
+    -e '
+      my $dbic_class = shift;
+      require_module $dbic_class;
+      print schema_dbic2graphql($dbic_class->connect)->to_doc;
+    ' \
+    -It/lib-dbicschema Schema | less
 
 =head1 AUTHOR
 
