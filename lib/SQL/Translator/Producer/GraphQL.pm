@@ -107,7 +107,7 @@ sub _type2input {
 sub schema_dbic2graphql {
   my ($dbic_schema) = @_;
   my @ast = ({kind => 'scalar', name => 'DateTime'});
-  my (%name2type, %name2columns, %name2pk21, %name2fk21);
+  my (%name2type, %name2column21, %name2pk21, %name2fk21);
   for my $source (map $dbic_schema->source($_), $dbic_schema->sources) {
     my $name = _dbicsource2pretty($source);
     my %fields;
@@ -126,14 +126,14 @@ sub schema_dbic2graphql {
         ),
       };
       $name2fk21{$name}->{$column} = 1 if $info->{is_foreign_key};
-      push @{ $name2columns{$name} }, $column;
+      $name2column21{$name}->{$column} = 1;
     }
     push @ast, _type2input($name, \%fields, $name2pk21{$name}, $name2fk21{$name});
     for my $rel (keys %rel2info) {
       my $info = $rel2info{$rel};
       my $type = _dbicsource2pretty($info->{source});
       $rel =~ s/_id$//; # dumb heuristic
-      $rel .= '1' if grep $_ eq $rel, @{ $name2columns{$name} };
+      $rel .= '1' if $name2column21{$name}->{$rel};
       $type = _apply_modifier('list', $type) if $info->{attrs}{accessor} eq 'multi';
       $fields{$rel} = +{
         type => $type,
@@ -161,7 +161,7 @@ sub schema_dbic2graphql {
               $_ => { type => _apply_modifier('non_null', $type->{fields}{$_}{type}) }
             },
           })
-        } @{$name2columns{$name}}
+        } keys %{ $name2column21{$name} };
       } keys %name2type
     },
   };
