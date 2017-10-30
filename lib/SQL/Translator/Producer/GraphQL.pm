@@ -106,6 +106,14 @@ sub _type2input {
   };
 }
 
+sub _make_fk_fields {
+  my ($name, $fk21, $name2type) = @_;
+  my $type = $name2type->{$name};
+  (map {
+    $_ => { type => $type->{fields}{$_}{type} }
+  } keys %$fk21);
+}
+
 sub schema_dbic2graphql {
   my ($dbic_schema) = @_;
   my @ast = ({kind => 'scalar', name => 'DateTime'});
@@ -181,9 +189,7 @@ sub schema_dbic2graphql {
             type => $name,
             args => {
               input => { type => _apply_modifier('non_null', "${name}Input") },
-              (map {
-                $_ => { type => $type->{fields}{$_}{type} }
-              } keys %{ $name2fk21{$name} }),
+              _make_fk_fields($name, $name2fk21{$name}, \%name2type),
             },
           },
           "update$name" => {
