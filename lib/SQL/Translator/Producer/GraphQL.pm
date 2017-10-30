@@ -116,7 +116,8 @@ sub schema_dbic2graphql {
       $fields{$column} = +{
         type => _apply_modifier(
           !$info->{is_nullable} && 'non_null',
-          $TYPEMAP{ lc $info->{data_type} },
+          $TYPEMAP{ lc $info->{data_type} }
+            // die "'$column' unknown data type: @{[lc $info->{data_type}]}\n",
         ),
       };
       $name2fk21{$name}->{$column} = 1 if $info->{is_foreign_key};
