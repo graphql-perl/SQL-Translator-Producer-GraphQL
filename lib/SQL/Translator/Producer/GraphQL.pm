@@ -77,6 +77,7 @@ my %TYPEMAP = (
   text => 'String',
   tinytext => 'String',
 );
+my %TYPE2SCALAR = map { ($_ => 1) } qw(ID String Int Float Boolean);
 
 sub _dbicsource2pretty {
   my ($source) = @_;
@@ -95,22 +96,29 @@ sub _apply_modifier {
 }
 
 sub _type2input {
-  my ($name, $fields, $pk21, $fk21) = @_;
+  my ($name, $fields, $pk21, $fk21, $column21) = @_;
   +{
     kind => 'input',
     name => "${name}Input",
     fields => {
       map { ($_ => $fields->{$_}) }
-        grep !$pk21->{$_} && !$fk21->{$_}, keys %$fields
+        grep !$pk21->{$_} && !$fk21->{$_}, keys %$column21
     },
   };
 }
 
 sub _make_fk_fields {
-  my ($name, $fk21, $name2type) = @_;
+  my ($name, $fk21, $name2type, $name2pk21) = @_;
   my $type = $name2type->{$name};
   (map {
-    $_ => { type => $type->{fields}{$_}{type} }
+    my $field_type = $type->{fields}{$_}{type};
+    $TYPE2SCALAR{$field_type}
+      ? ($_ => { type => $field_type })
+      : map {
+          (lcfirst "${field_type}_${_}" => {
+            type => $name2type->{$field_type}{fields}{$_}{type}
+          })
+        } keys %{ $name2pk21->{$field_type} }
   } keys %$fk21);
 }
 
@@ -147,18 +155,21 @@ sub schema_dbic2graphql {
       $name2fk21{$name}->{$column} = 1 if $info->{is_foreign_key};
       $name2column21{$name}->{$column} = 1;
     }
-    push @ast, _type2input($name, \%fields, $name2pk21{$name}, $name2fk21{$name});
     for my $rel (keys %rel2info) {
       my $info = $rel2info{$rel};
       DEBUG and _debug("schema_dbic2graphql($name.rel)", $rel, $info);
       my $type = _dbicsource2pretty($info->{source});
       $rel =~ s/_id$//; # dumb heuristic
-      $rel .= '1' if $name2column21{$name}->{$rel};
+      delete $name2column21{$name}->{$rel}; # so it's not a "column" now
       $type = _apply_modifier('list', $type) if $info->{attrs}{accessor} eq 'multi';
       $fields{$rel} = +{
         type => $type,
       };
     }
+    push @ast, _type2input(
+      $name, \%fields, $name2pk21{$name}, $name2fk21{$name},
+      $name2column21{$name},
+    );
     my $spec = +{
       kind => 'type',
       name => $name,
@@ -197,7 +208,7 @@ sub schema_dbic2graphql {
             type => $name,
             args => {
               input => { type => _apply_modifier('non_null', "${name}Input") },
-              _make_fk_fields($name, $name2fk21{$name}, \%name2type),
+              _make_fk_fields($name, $name2fk21{$name}, \%name2type, \%name2pk21),
             },
           },
           "update$name" => {
