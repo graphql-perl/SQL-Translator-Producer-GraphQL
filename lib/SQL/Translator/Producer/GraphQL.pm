@@ -69,6 +69,7 @@ my %TYPEMAP = (
   # not DBI SQL_* types
   int => 'Int',
   text => 'String',
+  tinytext => 'String',
 );
 
 sub _dbicsource2pretty {
