@@ -52,6 +52,10 @@ Takes as input a [DBIx::Class::Schema](https://metacpan.org/pod/DBIx::Class::Sch
       ' \
       -It/lib-dbicschema Schema | less
 
+# DEBUGGING
+
+To debug, set environment variable `GRAPHQL_DEBUG` to a true value.
+
 # AUTHOR
 
 Ed J, `<etj at cpan.org>`

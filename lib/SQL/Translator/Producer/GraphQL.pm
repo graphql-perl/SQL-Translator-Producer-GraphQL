@@ -4,12 +4,14 @@ use strict;
 use warnings;
 use SQL::Translator::Producer::DBIx::Class::File;
 use GraphQL::Schema;
+use GraphQL::Debug qw(_debug);
 use Exporter 'import';
 
 our $VERSION = "0.01";
 our @EXPORT_OK = qw(
   schema_dbic2graphql
 );
+use constant DEBUG => $ENV{GRAPHQL_DEBUG};
 
 my %TYPEMAP = (
   guid => 'String',
@@ -118,6 +120,7 @@ sub schema_dbic2graphql {
     } $source->relationships;
     for my $column (keys %$columns_info) {
       my $info = $columns_info->{$column};
+      DEBUG and _debug("schema_dbic2graphql($name.col)", $column, $info);
       $fields{$column} = +{
         type => _apply_modifier(
           !$info->{is_nullable} && 'non_null',
@@ -131,6 +134,7 @@ sub schema_dbic2graphql {
     push @ast, _type2input($name, \%fields, $name2pk21{$name}, $name2fk21{$name});
     for my $rel (keys %rel2info) {
       my $info = $rel2info{$rel};
+      DEBUG and _debug("schema_dbic2graphql($name.rel)", $rel, $info);
       my $type = _dbicsource2pretty($info->{source});
       $rel =~ s/_id$//; # dumb heuristic
       $rel .= '1' if $name2column21{$name}->{$rel};
@@ -278,6 +282,10 @@ L<GraphQL::Schema> object. E.g.:
       print schema_dbic2graphql($dbic_class->connect)->to_doc;
     ' \
     -It/lib-dbicschema Schema | less
+
+=head1 DEBUGGING
+
+To debug, set environment variable C<GRAPHQL_DEBUG> to a true value.
 
 =head1 AUTHOR
 
