@@ -50,12 +50,13 @@ type Module {
 }
 
 input ModuleInput {
+  author_id: Int
   name: String
 }
 
 type Mutation {
   createAuthor(input: AuthorInput!): Author
-  createModule(author_id: Int, input: ModuleInput!): Module
+  createModule(input: ModuleInput!): Module
   deleteAuthor(id: Int!): Boolean
   deleteModule(id: Int!): Boolean
   updateAuthor(id: Int!, input: AuthorInput!): Author

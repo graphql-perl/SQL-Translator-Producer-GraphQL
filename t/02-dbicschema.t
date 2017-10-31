@@ -43,6 +43,7 @@ type BlogTag {
 }
 
 input BlogTagInput {
+  blog_id: Int!
   name: String!
 }
 
@@ -50,9 +51,9 @@ scalar DateTime
 
 type Mutation {
   createBlog(input: BlogInput!): Blog
-  createBlogTag(blog_id: Int!, input: BlogTagInput!): BlogTag
-  createPhoto(input: PhotoInput!, photoset_id: String!): Photo
-  createPhotoset(input: PhotosetInput!, photo_id: String!): Photoset
+  createBlogTag(input: BlogTagInput!): BlogTag
+  createPhoto(input: PhotoInput!): Photo
+  createPhotoset(input: PhotosetInput!): Photoset
   deleteBlog(id: Int!): Boolean
   deleteBlogTag(id: Int!): Boolean
   deletePhoto(id: String!): Boolean
@@ -100,6 +101,7 @@ input PhotoInput {
   medium: String
   original: String
   original_url: String
+  photoset_id: String!
   region: String
   small: String
   square: String
@@ -139,6 +141,7 @@ input PhotosetInput {
   farm: Int!
   idx: Int!
   needs_interstitial: Int
+  photo_id: String!
   secret: String!
   server: String!
   timestamp: DateTime!

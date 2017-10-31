@@ -96,13 +96,14 @@ sub _apply_modifier {
 }
 
 sub _type2input {
-  my ($name, $fields, $pk21, $fk21, $column21) = @_;
+  my ($name, $fields, $name2pk21, $fk21, $column21, $name2type) = @_;
   +{
     kind => 'input',
     name => "${name}Input",
     fields => {
-      map { ($_ => $fields->{$_}) }
-        grep !$pk21->{$_} && !$fk21->{$_}, keys %$column21
+      (map { ($_ => $fields->{$_}) }
+        grep !$name2pk21->{$name}{$_} && !$fk21->{$_}, keys %$column21),
+      _make_fk_fields($name, $fk21, $name2type, $name2pk21),
     },
   };
 }
@@ -175,8 +176,8 @@ sub schema_dbic2graphql {
     push @ast, $spec;
   }
   push @ast, map _type2input(
-    $_, \%fields, $name2pk21{$_}, $name2fk21{$_},
-    $name2column21{$_},
+    $_, $name2type{$_}->{fields}, \%name2pk21, $name2fk21{$_},
+    $name2column21{$_}, \%name2type,
   ), keys %name2type;
   push @ast, {
     kind => 'type',
@@ -208,7 +209,6 @@ sub schema_dbic2graphql {
             type => $name,
             args => {
               input => { type => _apply_modifier('non_null', "${name}Input") },
-              _make_fk_fields($name, $name2fk21{$name}, \%name2type, \%name2pk21),
             },
           },
           "update$name" => {
