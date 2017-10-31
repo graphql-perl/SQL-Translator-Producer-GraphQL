@@ -151,47 +151,16 @@ input PhotosetInput {
 }
 
 type Query {
-  blogByContent(content: String!): [Blog]
-  blogByCreated_time(created_time: String!): [Blog]
-  blogById(id: Int!): Blog
-  blogByLocation(location: String!): [Blog]
-  blogBySubtitle(subtitle: String!): [Blog]
-  blogByTimestamp(timestamp: DateTime!): [Blog]
-  blogByTitle(title: String!): [Blog]
-  blogtagById(id: Int!): BlogTag
-  blogtagByName(name: String!): [BlogTag]
-  photoByCountry(country: String!): [Photo]
-  photoByDescription(description: String!): [Photo]
-  photoById(id: String!): Photo
-  photoByIdx(idx: Int!): [Photo]
-  photoByIs_glen(is_glen: String!): [Photo]
-  photoByIsprimary(isprimary: String!): [Photo]
-  photoByLarge(large: String!): [Photo]
-  photoByLat(lat: String!): [Photo]
-  photoByLocality(locality: String!): [Photo]
-  photoByLon(lon: String!): [Photo]
-  photoByMedium(medium: String!): [Photo]
-  photoByOriginal(original: String!): [Photo]
-  photoByOriginal_url(original_url: String!): [Photo]
-  photoByRegion(region: String!): [Photo]
-  photoBySmall(small: String!): [Photo]
-  photoBySquare(square: String!): [Photo]
-  photoByTaken(taken: DateTime!): [Photo]
-  photoByThumbnail(thumbnail: String!): [Photo]
-  photosetByCan_comment(can_comment: Int!): [Photoset]
-  photosetByCount_comments(count_comments: Int!): [Photoset]
-  photosetByCount_views(count_views: Int!): [Photoset]
-  photosetByDate_create(date_create: Int!): [Photoset]
-  photosetByDate_update(date_update: Int!): [Photoset]
-  photosetByDescription(description: String!): [Photoset]
-  photosetByFarm(farm: Int!): [Photoset]
-  photosetById(id: String!): Photoset
-  photosetByIdx(idx: Int!): [Photoset]
-  photosetByNeeds_interstitial(needs_interstitial: Int!): [Photoset]
-  photosetBySecret(secret: String!): [Photoset]
-  photosetByServer(server: String!): [Photoset]
-  photosetByTimestamp(timestamp: DateTime!): [Photoset]
-  photosetByTitle(title: String!): [Photoset]
-  photosetByVideos(videos: Int!): [Photoset]
-  photosetByVisibility_can_see_set(visibility_can_see_set: Int!): [Photoset]
+  blog(id: [Int!]!): [Blog]
+  blogTag(id: [Int!]!): [BlogTag]
+  photo(id: [String!]!): [Photo]
+  photoset(id: [String!]!): [Photoset]
+  # list of ORs each of which is list of ANDs
+  searchBlog(input: [[BlogInput!]!]!): [Blog]
+  # list of ORs each of which is list of ANDs
+  searchBlogTag(input: [[BlogTagInput!]!]!): [BlogTag]
+  # list of ORs each of which is list of ANDs
+  searchPhoto(input: [[PhotoInput!]!]!): [Photo]
+  # list of ORs each of which is list of ANDs
+  searchPhotoset(input: [[PhotosetInput!]!]!): [Photoset]
 }

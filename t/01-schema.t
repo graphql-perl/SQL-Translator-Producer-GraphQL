@@ -64,10 +64,10 @@ type Mutation {
 }
 
 type Query {
-  authorByAge(age: Int!): [Author]
-  authorById(id: Int!): Author
-  authorByMessage(message: String!): [Author]
-  authorByName(name: String!): [Author]
-  moduleById(id: Int!): Module
-  moduleByName(name: String!): [Module]
+  author(id: [Int!]!): [Author]
+  module(id: [Int!]!): [Module]
+  # list of ORs each of which is list of ANDs
+  searchAuthor(input: [[AuthorInput!]!]!): [Author]
+  # list of ORs each of which is list of ANDs
+  searchModule(input: [[ModuleInput!]!]!): [Module]
 }

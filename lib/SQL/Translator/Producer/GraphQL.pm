@@ -186,14 +186,34 @@ sub schema_dbic2graphql {
       map {
         my $name = $_;
         my $type = $name2type{$name};
-        map {
-          (lc($name).'By'.ucfirst($_) => {
-            type => _apply_modifier(!$name2pk21{$name}->{$_} && 'list', $name),
+        (
+          # the PKs query
+          lcfirst($name) => {
+            type => _apply_modifier('list', $name),
             args => {
-              $_ => { type => _apply_modifier('non_null', $type->{fields}{$_}{type}) }
+              map {
+                $_ => {
+                  type => _apply_modifier('non_null', _apply_modifier('list',
+                    _apply_modifier('non_null', $type->{fields}{$_}{type})
+                  ))
+                }
+              } keys %{ $name2pk21{$name} }
             },
-          })
-        } grep !$name2fk21{$name}->{$_}, keys %{ $name2column21{$name} };
+          },
+          "search$name" => {
+            description => 'list of ORs each of which is list of ANDs',
+            type => _apply_modifier('list', $name),
+            args => {
+              input => {
+                type => _apply_modifier('non_null', _apply_modifier('list',
+                  _apply_modifier('non_null', _apply_modifier('list',
+                    _apply_modifier('non_null', "${name}Input")
+                  ))
+                ))
+              },
+            },
+          },
+        )
       } keys %name2type
     },
   };
