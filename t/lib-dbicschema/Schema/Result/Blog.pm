@@ -42,9 +42,6 @@ __PACKAGE__->has_many(
 # Created by DBIx::Class::Schema::Loader v0.07015 @ 2012-02-05 21:35:07
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Pu8So1Y80nFfvuHrqLpqag
 
-use Time::Duration;
-use DateTime;
-
 # Convert date strings to datetime objects, and vice versa
 __PACKAGE__->inflate_column(
   "created_time",

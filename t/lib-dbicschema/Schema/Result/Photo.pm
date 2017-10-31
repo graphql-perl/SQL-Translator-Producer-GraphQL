@@ -73,8 +73,6 @@ __PACKAGE__->has_many(
 # Created by DBIx::Class::Schema::Loader v0.07015 @ 2012-02-05 21:35:07
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:hBwyD8s8bHZ6aae1bl2a3Q
 
-use Time::Duration;
-
 __PACKAGE__->belongs_to(
   "set",
   "Schema::Result::Photoset",

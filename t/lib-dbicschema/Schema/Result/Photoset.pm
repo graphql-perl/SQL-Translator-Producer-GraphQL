@@ -75,7 +75,6 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07015 @ 2012-02-05 21:35:07
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:A75CmBVd9ombVH4YCAs9eg
 
-use Time::Duration;
 use Encode;
 
 __PACKAGE__->belongs_to(

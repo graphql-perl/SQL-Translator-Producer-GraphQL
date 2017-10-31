@@ -1,6 +1,5 @@
 package Schema::ResultSet::Blog;
 
-use Modern::Perl;
 use base 'DBIx::Class::ResultSet';
 
 sub by_id {

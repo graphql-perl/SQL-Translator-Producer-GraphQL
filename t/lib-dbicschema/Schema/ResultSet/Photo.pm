@@ -1,6 +1,5 @@
 package Schema::ResultSet::Photo;
 
-use Modern::Perl;
 use base 'DBIx::Class::ResultSet';
 
 sub latest {

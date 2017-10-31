@@ -1,6 +1,5 @@
 package Schema::ResultSet::Photoset;
 
-use Modern::Perl;
 use base 'DBIx::Class::ResultSet';
 
 sub by_id {
