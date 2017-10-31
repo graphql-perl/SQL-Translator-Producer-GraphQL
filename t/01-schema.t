@@ -68,7 +68,6 @@ type Query {
   authorById(id: Int!): Author
   authorByMessage(message: String!): [Author]
   authorByName(name: String!): [Author]
-  moduleByAuthor_id(author_id: Int!): [Module]
   moduleById(id: Int!): Module
   moduleByName(name: String!): [Module]
 }

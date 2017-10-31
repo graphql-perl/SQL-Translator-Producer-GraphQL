@@ -193,7 +193,7 @@ sub schema_dbic2graphql {
               $_ => { type => _apply_modifier('non_null', $type->{fields}{$_}{type}) }
             },
           })
-        } keys %{ $name2column21{$name} };
+        } grep !$name2fk21{$name}->{$_}, keys %{ $name2column21{$name} };
       } keys %name2type
     },
   };
