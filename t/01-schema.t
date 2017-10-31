@@ -4,6 +4,8 @@ use Test::More 0.98;
 use SQL::Translator;
 use File::Spec;
 
+my $expected = join '', <DATA>;
+
 sub do_test {
   my ($parser) = @_;
   my $t = SQL::Translator->new();
@@ -11,7 +13,19 @@ sub do_test {
   $t->filename(File::Spec->catfile('t', 'schema', lc "$parser.sql")) or die $t->error;
   $t->producer('GraphQL');
   my $result = $t->translate or die $t->error;
-  is $result, <<'EOD', $parser;
+  #open my $fh, '>', 'tf'; print $fh $result; # uncomment to regenerate
+  is $result, $expected, $parser;
+}
+
+for my $type (qw(MySQL SQLite)) {
+  subtest $type => sub {
+    do_test($type);
+  };
+}
+
+done_testing;
+
+__DATA__
 type Author {
   age: Int!
   get_module: [Module]
@@ -57,13 +71,3 @@ type Query {
   moduleById(id: Int!): Module
   moduleByName(name: String!): [Module]
 }
-EOD
-}
-
-for my $type (qw(MySQL SQLite)) {
-  subtest $type => sub {
-    do_test($type);
-  };
-}
-
-done_testing;
