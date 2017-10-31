@@ -166,10 +166,6 @@ sub schema_dbic2graphql {
         type => $type,
       };
     }
-    push @ast, _type2input(
-      $name, \%fields, $name2pk21{$name}, $name2fk21{$name},
-      $name2column21{$name},
-    );
     my $spec = +{
       kind => 'type',
       name => $name,
@@ -178,6 +174,10 @@ sub schema_dbic2graphql {
     $name2type{$name} = $spec;
     push @ast, $spec;
   }
+  push @ast, map _type2input(
+    $_, \%fields, $name2pk21{$_}, $name2fk21{$_},
+    $name2column21{$_},
+  ), keys %name2type;
   push @ast, {
     kind => 'type',
     name => 'Query',
