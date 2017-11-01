@@ -3,70 +3,74 @@ use Test::More 0.98;
 use File::Spec;
 use lib 't/lib-dbicschema';
 use Schema;
-
-use_ok 'SQL::Translator::Producer::GraphQL', 'schema_dbic2graphql';
+use SQL::Translator;
 
 my $expected = join '', <DATA>;
 my $dbic_class = 'Schema';
-my $got = schema_dbic2graphql($dbic_class->connect)->to_doc;
+my $t = SQL::Translator->new(
+  parser => 'SQL::Translator::Parser::DBIx::Class',
+  parser_args => { dbic_schema => $dbic_class->connect },
+  producer => 'GraphQL',
+);
+my $got = $t->translate or die $t->error;
 #open my $fh, '>', 'tf'; print $fh $got; # uncomment to regenerate
 is $got, $expected;
 
 done_testing;
 
 __DATA__
-type Blog {
-  blog_tags: [BlogTag]
-  content: String!
-  created_time: String!
-  id: Int!
-  location: String
-  subtitle: String
-  tags: [BlogTag]
-  timestamp: DateTime!
-  title: String!
-}
-
-input BlogInput {
-  content: String!
-  created_time: String!
-  location: String
-  subtitle: String
-  timestamp: DateTime!
-  title: String!
-}
-
-type BlogTag {
-  blog: Blog
+type BlogTags {
+  blog: Blogs
   id: Int!
   name: String!
 }
 
-input BlogTagInput {
-  blog_id: Int!
+input BlogTagsInput {
+  blogs_id: Int!
   name: String!
+}
+
+type Blogs {
+  content: String!
+  created_time: String!
+  get_blog_tags: [BlogTags]
+  id: Int!
+  location: String
+  subtitle: String
+  timestamp: DateTime!
+  title: String!
+}
+
+input BlogsInput {
+  content: String!
+  created_time: String!
+  location: String
+  subtitle: String
+  timestamp: DateTime!
+  title: String!
 }
 
 scalar DateTime
 
 type Mutation {
-  createBlog(input: BlogInput!): Blog
-  createBlogTag(input: BlogTagInput!): BlogTag
-  createPhoto(input: PhotoInput!): Photo
-  createPhotoset(input: PhotosetInput!): Photoset
-  deleteBlog(id: Int!): Boolean
-  deleteBlogTag(id: Int!): Boolean
-  deletePhoto(id: String!): Boolean
-  deletePhotoset(id: String!): Boolean
-  updateBlog(id: Int!, input: BlogInput!): Blog
-  updateBlogTag(id: Int!, input: BlogTagInput!): BlogTag
-  updatePhoto(id: String!, input: PhotoInput!): Photo
-  updatePhotoset(id: String!, input: PhotosetInput!): Photoset
+  createBlogTags(input: BlogTagsInput!): BlogTags
+  createBlogs(input: BlogsInput!): Blogs
+  createPhotos(input: PhotosInput!): Photos
+  createPhotosets(input: PhotosetsInput!): Photosets
+  deleteBlogTags(id: Int!): Boolean
+  deleteBlogs(id: Int!): Boolean
+  deletePhotos(id: String!): Boolean
+  deletePhotosets(id: String!): Boolean
+  updateBlogTags(id: Int!, input: BlogTagsInput!): BlogTags
+  updateBlogs(id: Int!, input: BlogsInput!): Blogs
+  updatePhotos(id: String!, input: PhotosInput!): Photos
+  updatePhotosets(id: String!, input: PhotosetsInput!): Photosets
 }
 
-type Photo {
+type Photos {
   country: String
   description: String
+  get_photosets: [Photosets]
   id: String!
   idx: Int
   is_glen: String
@@ -78,17 +82,15 @@ type Photo {
   medium: String
   original: String
   original_url: String
-  photoset: Photoset
-  photosets: [Photoset]
+  photoset: Photosets
   region: String
-  set: Photoset
   small: String
   square: String
   taken: DateTime
   thumbnail: String
 }
 
-input PhotoInput {
+input PhotosInput {
   country: String
   description: String
   idx: Int
@@ -101,7 +103,7 @@ input PhotoInput {
   medium: String
   original: String
   original_url: String
-  photoset_id: String!
+  photosets_id: String!
   region: String
   small: String
   square: String
@@ -109,7 +111,7 @@ input PhotoInput {
   thumbnail: String
 }
 
-type Photoset {
+type Photosets {
   can_comment: Int
   count_comments: Int
   count_views: Int
@@ -117,12 +119,12 @@ type Photoset {
   date_update: Int
   description: String!
   farm: Int!
+  get_photos: [Photos]
   id: String!
   idx: Int!
   needs_interstitial: Int
-  photos: [Photo]
-  primary: Photo
-  primary_photo: Photo
+  photos: Int
+  primary_photo: Photos
   secret: String!
   server: String!
   timestamp: DateTime!
@@ -131,7 +133,7 @@ type Photoset {
   visibility_can_see_set: Int
 }
 
-input PhotosetInput {
+input PhotosetsInput {
   can_comment: Int
   count_comments: Int
   count_views: Int
@@ -141,7 +143,8 @@ input PhotosetInput {
   farm: Int!
   idx: Int!
   needs_interstitial: Int
-  photo_id: String!
+  photos: Int
+  photos_id: String!
   secret: String!
   server: String!
   timestamp: DateTime!
@@ -151,16 +154,16 @@ input PhotosetInput {
 }
 
 type Query {
-  blog(id: [Int!]!): [Blog]
-  blogTag(id: [Int!]!): [BlogTag]
-  photo(id: [String!]!): [Photo]
-  photoset(id: [String!]!): [Photoset]
+  blogTags(id: [Int!]!): [BlogTags]
+  blogs(id: [Int!]!): [Blogs]
+  photos(id: [String!]!): [Photos]
+  photosets(id: [String!]!): [Photosets]
   # list of ORs each of which is list of ANDs
-  searchBlog(input: [[BlogInput!]!]!): [Blog]
+  searchBlogTags(input: [[BlogTagsInput!]!]!): [BlogTags]
   # list of ORs each of which is list of ANDs
-  searchBlogTag(input: [[BlogTagInput!]!]!): [BlogTag]
+  searchBlogs(input: [[BlogsInput!]!]!): [Blogs]
   # list of ORs each of which is list of ANDs
-  searchPhoto(input: [[PhotoInput!]!]!): [Photo]
+  searchPhotos(input: [[PhotosInput!]!]!): [Photos]
   # list of ORs each of which is list of ANDs
-  searchPhotoset(input: [[PhotosetInput!]!]!): [Photoset]
+  searchPhotosets(input: [[PhotosetsInput!]!]!): [Photosets]
 }
