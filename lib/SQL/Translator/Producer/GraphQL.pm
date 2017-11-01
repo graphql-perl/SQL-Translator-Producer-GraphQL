@@ -17,7 +17,7 @@ sub produce {
   eval SQL::Translator::Producer::DBIx::Class::File::produce($dbic_translator);
   die "Failed to make DBIx::Class::Schema: $@" if $@;
   my $converted = GraphQL::Plugin::Convert::DBIC->to_graphql(
-    $dbic_schema_class->connect
+    sub { $dbic_schema_class->connect }
   );
   $converted->{schema}->to_doc;
 }

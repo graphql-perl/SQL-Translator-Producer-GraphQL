@@ -18,13 +18,13 @@ WriteMakefile(
     'SQL::Translator' => '0',
     'SQL::Translator::Producer::DBIx::Class::File' => '0',
     'GraphQL' => '0.20', # convert plugin
-    'GraphQL::Plugin::Convert::DBIC' => '0.01',
+    'GraphQL::Plugin::Convert::DBIC' => '0.02', # callback API
   },
   PREREQ_PM => {
     'SQL::Translator' => '0',
     'SQL::Translator::Producer::DBIx::Class::File' => '0',
     'GraphQL' => '0.20', # convert plugin
-    'GraphQL::Plugin::Convert::DBIC' => '0.01',
+    'GraphQL::Plugin::Convert::DBIC' => '0.02', # callback API
   },
   clean => { FILES => 'SQL-Translator-Producer-GraphQL-*' },
   META_MERGE => {
