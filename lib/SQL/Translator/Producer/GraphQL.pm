@@ -5,7 +5,7 @@ use warnings;
 use SQL::Translator::Producer::DBIx::Class::File;
 use GraphQL::Plugin::Convert::DBIC;
 
-our $VERSION = "0.02";
+our $VERSION = "0.03";
 
 my $dbic_schema_class_track = 'CLASS00000';
 sub produce {
