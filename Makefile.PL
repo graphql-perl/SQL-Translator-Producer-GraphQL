@@ -36,7 +36,7 @@ WriteMakefile(
         web => 'https://github.com/graphql-perl/SQL-Translator-Producer-GraphQL',
       },
       bugtracker  => {
-        web => 'https://github.com/graphql-perl/graphql-perl/issues',
+        web => 'https://github.com/graphql-perl/SQL-Translator-Producer-GraphQL/issues',
       },
       license => [ 'http://dev.perl.org/licenses/' ],
     },
