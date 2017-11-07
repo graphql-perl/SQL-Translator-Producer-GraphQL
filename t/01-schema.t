@@ -40,6 +40,12 @@ input AuthorInput {
   name: String
 }
 
+input AuthorSearchInput {
+  age: Int
+  message: String
+  name: String
+}
+
 scalar DateTime
 
 type Module {
@@ -50,6 +56,11 @@ type Module {
 }
 
 input ModuleInput {
+  author_id: Int
+  name: String
+}
+
+input ModuleSearchInput {
   author_id: Int
   name: String
 }
@@ -66,8 +77,8 @@ type Mutation {
 type Query {
   author(id: [Int!]!): [Author]
   module(id: [Int!]!): [Module]
-  # list of ORs each of which is list of ANDs
-  searchAuthor(input: [[AuthorInput!]!]!): [Author]
-  # list of ORs each of which is list of ANDs
-  searchModule(input: [[ModuleInput!]!]!): [Module]
+  # input to search
+  searchAuthor(input: AuthorSearchInput!): [Author]
+  # input to search
+  searchModule(input: ModuleSearchInput!): [Module]
 }

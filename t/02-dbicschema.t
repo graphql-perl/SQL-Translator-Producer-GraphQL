@@ -30,6 +30,10 @@ input BlogTagsInput {
   name: String!
 }
 
+input BlogTagsSearchInput {
+  name: String
+}
+
 type Blogs {
   content: String!
   created_time: String!
@@ -48,6 +52,15 @@ input BlogsInput {
   subtitle: String
   timestamp: DateTime!
   title: String!
+}
+
+input BlogsSearchInput {
+  content: String
+  created_time: String
+  location: String
+  subtitle: String
+  timestamp: DateTime
+  title: String
 }
 
 scalar DateTime
@@ -111,6 +124,26 @@ input PhotosInput {
   thumbnail: String
 }
 
+input PhotosSearchInput {
+  country: String
+  description: String
+  idx: Int
+  is_glen: String
+  isprimary: String
+  large: String
+  lat: String
+  locality: String
+  lon: String
+  medium: String
+  original: String
+  original_url: String
+  region: String
+  small: String
+  square: String
+  taken: DateTime
+  thumbnail: String
+}
+
 type Photosets {
   can_comment: Int
   count_comments: Int
@@ -153,17 +186,36 @@ input PhotosetsInput {
   visibility_can_see_set: Int
 }
 
+input PhotosetsSearchInput {
+  can_comment: Int
+  count_comments: Int
+  count_views: Int
+  date_create: Int
+  date_update: Int
+  description: String
+  farm: Int
+  idx: Int
+  needs_interstitial: Int
+  photos: Int
+  secret: String
+  server: String
+  timestamp: DateTime
+  title: String
+  videos: Int
+  visibility_can_see_set: Int
+}
+
 type Query {
   blogTags(id: [Int!]!): [BlogTags]
   blogs(id: [Int!]!): [Blogs]
   photos(id: [String!]!): [Photos]
   photosets(id: [String!]!): [Photosets]
-  # list of ORs each of which is list of ANDs
-  searchBlogTags(input: [[BlogTagsInput!]!]!): [BlogTags]
-  # list of ORs each of which is list of ANDs
-  searchBlogs(input: [[BlogsInput!]!]!): [Blogs]
-  # list of ORs each of which is list of ANDs
-  searchPhotos(input: [[PhotosInput!]!]!): [Photos]
-  # list of ORs each of which is list of ANDs
-  searchPhotosets(input: [[PhotosetsInput!]!]!): [Photosets]
+  # input to search
+  searchBlogTags(input: BlogTagsSearchInput!): [BlogTags]
+  # input to search
+  searchBlogs(input: BlogsSearchInput!): [Blogs]
+  # input to search
+  searchPhotos(input: PhotosSearchInput!): [Photos]
+  # input to search
+  searchPhotosets(input: PhotosetsSearchInput!): [Photosets]
 }
