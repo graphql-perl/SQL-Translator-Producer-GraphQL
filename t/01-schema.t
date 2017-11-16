@@ -34,9 +34,16 @@ type Author {
   name: String
 }
 
-input AuthorInput {
+input AuthorCreateInput {
   age: Int!
   message: String!
+  name: String
+}
+
+input AuthorMutateInput {
+  age: Int
+  id: Int!
+  message: String
   name: String
 }
 
@@ -46,8 +53,6 @@ input AuthorSearchInput {
   name: String
 }
 
-scalar DateTime
-
 type Module {
   author: Author
   author_id: Int
@@ -55,8 +60,14 @@ type Module {
   name: String
 }
 
-input ModuleInput {
+input ModuleCreateInput {
   author_id: Int
+  name: String
+}
+
+input ModuleMutateInput {
+  author_id: Int
+  id: Int!
   name: String
 }
 
@@ -66,12 +77,12 @@ input ModuleSearchInput {
 }
 
 type Mutation {
-  createAuthor(input: AuthorInput!): Author
-  createModule(input: ModuleInput!): Module
-  deleteAuthor(id: Int!): Boolean
-  deleteModule(id: Int!): Boolean
-  updateAuthor(id: Int!, input: AuthorInput!): Author
-  updateModule(id: Int!, input: ModuleInput!): Module
+  createAuthor(input: [AuthorCreateInput!]!): [Author]
+  createModule(input: [ModuleCreateInput!]!): [Module]
+  deleteAuthor(input: [AuthorMutateInput!]!): [Boolean]
+  deleteModule(input: [ModuleMutateInput!]!): [Boolean]
+  updateAuthor(input: [AuthorMutateInput!]!): [Author]
+  updateModule(input: [ModuleMutateInput!]!): [Module]
 }
 
 type Query {
