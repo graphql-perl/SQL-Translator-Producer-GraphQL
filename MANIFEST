@@ -19,5 +19,6 @@ t/lib-dbicschema/Schema/ResultSet/Photoset.pm
 t/schema/mysql.sql
 t/schema/sqlite.sql
 t/snapshots/02-dbicschema_t/schema
+t/snapshots/03-sqlread_t/schema
 xt/manifest.t
 xt/pod.t
