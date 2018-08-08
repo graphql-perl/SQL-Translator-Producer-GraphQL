@@ -15,6 +15,7 @@ WriteMakefile(
   },
   TEST_REQUIRES => {
     'Test::More' => '0.98',
+    'Test::Snapshot' => '0.05',
   },
   PREREQ_PM => {
     'SQL::Translator' => '0',
