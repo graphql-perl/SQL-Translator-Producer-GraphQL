@@ -18,7 +18,6 @@ WriteMakefile(
   },
   PREREQ_PM => {
     'SQL::Translator' => '0',
-    'SQL::Translator::Producer::DBIx::Class::File' => '0',
     'GraphQL' => '0.21', # DateTime
     'GraphQL::Plugin::Convert::DBIC' => '0.03', # new mutations etc
   },
