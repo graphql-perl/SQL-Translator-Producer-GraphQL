@@ -57,19 +57,58 @@ input BlogsSearchInput {
   title: String
 }
 
+enum CustomType {
+  bar
+  baz_space
+  foo
+}
+
 type Mutation {
   createBlogTags(input: [BlogTagsCreateInput!]!): [BlogTags]
   createBlogs(input: [BlogsCreateInput!]!): [Blogs]
+  createPg(input: [PgCreateInput!]!): [Pg]
   createPhotos(input: [PhotosCreateInput!]!): [Photos]
   createPhotosets(input: [PhotosetsCreateInput!]!): [Photosets]
   deleteBlogTags(input: [BlogTagsMutateInput!]!): [Boolean]
   deleteBlogs(input: [BlogsMutateInput!]!): [Boolean]
+  deletePg(input: [PgMutateInput!]!): [Boolean]
   deletePhotos(input: [PhotosMutateInput!]!): [Boolean]
   deletePhotosets(input: [PhotosetsMutateInput!]!): [Boolean]
   updateBlogTags(input: [BlogTagsMutateInput!]!): [BlogTags]
   updateBlogs(input: [BlogsMutateInput!]!): [Blogs]
+  updatePg(input: [PgMutateInput!]!): [Pg]
   updatePhotos(input: [PhotosMutateInput!]!): [Photos]
   updatePhotosets(input: [PhotosetsMutateInput!]!): [Photosets]
+}
+
+type Pg {
+  another_enum_column: CustomType!
+  enum_column: CustomType!
+  id: String!
+  timestamp_with_tz: DateTime
+  timestamp_without_tz: DateTime!
+}
+
+input PgCreateInput {
+  another_enum_column: CustomType!
+  enum_column: CustomType!
+  timestamp_with_tz: DateTime
+  timestamp_without_tz: DateTime!
+}
+
+input PgMutateInput {
+  another_enum_column: CustomType
+  enum_column: CustomType
+  id: String!
+  timestamp_with_tz: DateTime
+  timestamp_without_tz: DateTime
+}
+
+input PgSearchInput {
+  another_enum_column: CustomType
+  enum_column: CustomType
+  timestamp_with_tz: DateTime
+  timestamp_without_tz: DateTime
 }
 
 type Photos {
@@ -241,12 +280,15 @@ input PhotosetsSearchInput {
 type Query {
   blogTags(id: [Int!]!): [BlogTags]
   blogs(id: [Int!]!): [Blogs]
+  pg(id: [String!]!): [Pg]
   photos(id: [String!]!): [Photos]
   photosets(id: [String!]!): [Photosets]
   # input to search
   searchBlogTags(input: BlogTagsSearchInput!): [BlogTags]
   # input to search
   searchBlogs(input: BlogsSearchInput!): [Blogs]
+  # input to search
+  searchPg(input: PgSearchInput!): [Pg]
   # input to search
   searchPhotos(input: PhotosSearchInput!): [Photos]
   # input to search

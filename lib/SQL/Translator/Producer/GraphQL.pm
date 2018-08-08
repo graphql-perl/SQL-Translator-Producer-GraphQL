@@ -91,6 +91,7 @@ __PACKAGE__->table('${tname}');
             default_value     => $_->default_value,
             data_type         => $_->data_type,
             size              => $_->size,
+            ($_->{extra} ? (extra => $_->{extra}) : ()),
         } }
          } ($table->get_fields);
 
