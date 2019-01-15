@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use GraphQL::Plugin::Convert::DBIC;
 
-our $VERSION = "0.04";
+our $VERSION = "0.05";
 
 my $dbic_schema_class_track = 'CLASS00000';
 sub produce {
