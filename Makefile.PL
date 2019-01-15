@@ -20,7 +20,7 @@ WriteMakefile(
   PREREQ_PM => {
     'SQL::Translator' => '0',
     'GraphQL' => '0.21', # DateTime
-    'GraphQL::Plugin::Convert::DBIC' => '0.03', # new mutations etc
+    'GraphQL::Plugin::Convert::DBIC' => '0.07', # singular not plural
   },
   clean => { FILES => 'SQL-Translator-Producer-GraphQL-*' },
   META_MERGE => {
